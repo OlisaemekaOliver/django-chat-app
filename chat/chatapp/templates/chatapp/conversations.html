@@ -1,0 +1,18 @@
+<h2>Your Chats</h2>
+
+{% for convo in conversations %}
+    <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 8px;">
+        <p>
+            Chat with: 
+            {% if convo.buyer == request.user %}
+                {{ convo.seller.username }}
+            {% else %}
+                {{ convo.buyer.username }}
+            {% endif %}
+        </p>
+
+        <p>Unread: {{ convo.unread_count_for(request.user) }}</p>
+
+        <a href="{% url 'chat_view' convo.id %}">Open Chat</a>
+    </div>
+{% endfor %}
