@@ -140,6 +140,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
+CSRF_COOKIE_SECURE = False
+
+
 LOGIN_URL = '/login/'
 
 # Redirect after login
