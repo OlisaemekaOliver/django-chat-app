@@ -30,6 +30,12 @@ ALLOWED_HOSTS = ["*"]
 
 
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://chat-interface-eige.onrender.com",
+]
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -131,6 +137,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+LOGIN_URL = '/login/'
 
 # Redirect after login
 LOGIN_REDIRECT_URL = '/'  # or any page you want, e.g., your chat list or home page

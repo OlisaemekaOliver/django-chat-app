@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from .models import Conversation, Message
 
 @login_required
@@ -15,3 +17,17 @@ def chat_view(request, conversation_id):
         "conversation": conversation,
         "messages": messages
     })
+
+
+
+def signup(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # auto login after signup
+            return redirect("home")
+    else:
+        form = UserCreationForm()
+
+    return render(request, "chatapp/signup.html", {"form": form})
