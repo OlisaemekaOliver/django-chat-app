@@ -23,8 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-h1yy^x44*-l38w&*fwbun7i(-@m*mazx$q4rif!c=nbzog$*f6'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Enable DEBUG only locally
+DEBUG = os.environ.get("RENDER") != "true"
 
 ALLOWED_HOSTS = ["*"]
 
@@ -81,21 +81,26 @@ ASGI_APPLICATION = "chat.asgi.application"
 
 
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [("redis://red-d4ovuaa4i8rc73ccqo70:6379/0")],
+
+
+# ---- CHANNEL LAYERS ----
+if DEBUG:
+    # LOCAL DEVELOPMENT (works instantly)
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer'
+        }
+    }
+else:
+    # PRODUCTION ON RENDER — uses your Redis URL
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [os.environ.get("REDIS_URL")],
+            },
         },
-    },
-}
-
-
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels.layers.InMemoryChannelLayer'
-#     }
-# }
+    }
 
 
 # Database
