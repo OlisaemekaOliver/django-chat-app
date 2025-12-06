@@ -109,6 +109,10 @@ else:
     }
 
 
+print("DEBUG = ", DEBUG)
+print("REDIS_URL = ", os.environ.get("REDIS_URL"))
+
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
