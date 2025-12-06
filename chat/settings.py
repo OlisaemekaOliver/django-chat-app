@@ -16,6 +16,29 @@ import os
 if os.environ.get("RENDER"):
     DEBUG = False
     
+# ---- CHANNEL LAYERS ----
+if DEBUG:
+    # LOCAL DEVELOPMENT (works instantly)
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer'
+        }
+    }
+else:
+    # PRODUCTION ON RENDER — uses your Redis URL
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [os.environ.get("REDIS_URL")],
+            },
+        },
+    }
+
+
+print("DEBUG = ", DEBUG)
+print("REDIS_URL = ", os.environ.get("REDIS_URL"))    
+    
 from pathlib import Path
 
 
@@ -89,28 +112,7 @@ ASGI_APPLICATION = "chat.asgi.application"
 
 
 
-# ---- CHANNEL LAYERS ----
-if DEBUG:
-    # LOCAL DEVELOPMENT (works instantly)
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels.layers.InMemoryChannelLayer'
-        }
-    }
-else:
-    # PRODUCTION ON RENDER — uses your Redis URL
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels_redis.core.RedisChannelLayer',
-            'CONFIG': {
-                "hosts": [os.environ.get("REDIS_URL")],
-            },
-        },
-    }
 
-
-print("DEBUG = ", DEBUG)
-print("REDIS_URL = ", os.environ.get("REDIS_URL"))
 
 
 # Database
