@@ -3,6 +3,7 @@ services:
     name: chatapp
     env: python
     plan: free
+    rootDir: .
     buildCommand: "pip install -r requirements.txt"
     startCommand: "daphne -b 0.0.0.0 -p $PORT chat.asgi:application"
     runtime: python3
@@ -12,3 +13,5 @@ services:
         value: chat.settings
       - key: PYTHON_VERSION
         value: 3.10.12
+      - key: REDIS_URL
+        sync: false
