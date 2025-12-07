@@ -7,27 +7,22 @@ DEBUG = not bool(os.environ.get("RENDER"))
 # ---- CHANNEL LAYERS CONFIG ----
 REDIS_URL = os.environ.get("REDIS_URL")
 
-if DEBUG:
-    # Local development
+if REDIS_URL:
     CHANNEL_LAYERS = {
         "default": {
-            "BACKEND": "channels.layers.InMemoryChannelLayer",
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [REDIS_URL],  # Do not add ssl=True
+            },
         }
     }
 else:
-    # Render Production
-    if REDIS_URL:
-        CHANNEL_LAYERS = {
-            "default": {
-                "BACKEND": "channels_redis.core.RedisChannelLayer",
-                "CONFIG": {
-                    "hosts": [REDIS_URL],
-                    "ssl": True,
-                },
-            },
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
         }
-    else:
-        print("❌ NO REDIS_URL ENVIRONMENT VARIABLE FOUND")
+    }
+
 
 print("DEBUG =", DEBUG)
 print("REDIS_URL =", REDIS_URL)
