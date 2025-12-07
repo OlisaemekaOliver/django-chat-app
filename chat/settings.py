@@ -1,33 +1,37 @@
 print("⚡ SETTINGS LOADED")
 import os
+
 # Enable DEBUG only locally
-if os.environ.get("RENDER"):
-    DEBUG = False
-else:
-    DEBUG = True
-    
-# ---- CHANNEL LAYERS ----
+DEBUG = not bool(os.environ.get("RENDER"))
+
+# ---- CHANNEL LAYERS CONFIG ----
+REDIS_URL = os.environ.get("REDIS_URL")
+
 if DEBUG:
-    # LOCAL DEVELOPMENT (works instantly)
+    # Local development
     CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels.layers.InMemoryChannelLayer'
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer",
         }
     }
 else:
-    # PRODUCTION ON RENDER — uses your Redis URL
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels_redis.core.RedisChannelLayer',
-            'CONFIG': {
-                "hosts": [os.environ.get("REDIS_URL")],
+    # Render Production
+    if REDIS_URL:
+        CHANNEL_LAYERS = {
+            "default": {
+                "BACKEND": "channels_redis.core.RedisChannelLayer",
+                "CONFIG": {
+                    "hosts": [REDIS_URL],
+                    "ssl": True,
+                },
             },
-        },
-    }
+        }
+    else:
+        print("❌ NO REDIS_URL ENVIRONMENT VARIABLE FOUND")
 
-
-print("DEBUG = ", DEBUG)
-print("REDIS_URL = ", os.environ.get("REDIS_URL"))    
+print("DEBUG =", DEBUG)
+print("REDIS_URL =", REDIS_URL)
+    
     
 from pathlib import Path
 
