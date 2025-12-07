@@ -3,6 +3,8 @@ import os
 # Enable DEBUG only locally
 if os.environ.get("RENDER"):
     DEBUG = False
+else:
+    DEBUG = True
     
 # ---- CHANNEL LAYERS ----
 if DEBUG:
