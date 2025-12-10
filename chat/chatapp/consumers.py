@@ -1,4 +1,5 @@
 import json
+from django.shortcuts import get_object_or_404
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
@@ -25,7 +26,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         from chat.chatapp.models import Conversation, Message
         from django.contrib.auth.models import User
 
-        conversation = Conversation.objects.get(id=self.room_id)
+        conversation = get_object_or_404(Conversation, id=self.room_id)
         user = User.objects.get(username=username)
 
         return Message.objects.create(
