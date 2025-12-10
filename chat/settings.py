@@ -44,7 +44,7 @@ SECRET_KEY = "django-insecure-h1yy^x44*-l38w&*fwbun7i(-@m*mazx$q4rif!c=nbzog$*f6
 ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://chat-interface-eige.onrender.com",
+    "https://django-chat-app-lkit.onrender.com",
 ]
 
 # -----------------------
